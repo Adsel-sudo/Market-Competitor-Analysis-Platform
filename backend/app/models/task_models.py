@@ -18,6 +18,9 @@ class TaskStatus(str, Enum):
 class TaskInputType(str, Enum):
     ASIN = "asin"
     PRODUCT_URL = "product_url"
+    KEYWORD = "keyword"
+    BSR_URL = "bsr_url"
+    SHOP_URL = "shop_url"
 
 
 class ParseStatus(str, Enum):
