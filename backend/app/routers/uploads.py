@@ -10,6 +10,8 @@ from sqlalchemy.orm import Session
 from app.core.db import get_db
 from app.models.task_models import AnalysisTask, ImportedFile, ParseStatus
 from app.schemas.task import UploadFileResponse
+from app.services.competitor_service import save_competitors
+from app.services.parser_sellersprite_bsr import parse_bsr
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +68,28 @@ def upload_task_file(
         db.add(imported_file)
         db.commit()
         db.refresh(imported_file)
+
+        if "bsr" in safe_original_name.lower():
+            try:
+                parsed_data = parse_bsr(str(saved_file_path))
+                save_competitors(db=db, task_id=task_id, data=parsed_data)
+                imported_file.parse_status = ParseStatus.PARSED
+                db.add(imported_file)
+                db.commit()
+                db.refresh(imported_file)
+                logger.info(
+                    "BSR file parsed successfully: task_id=%s file_id=%s rows=%s",
+                    task_id,
+                    imported_file.id,
+                    len(parsed_data),
+                )
+            except Exception:
+                db.rollback()
+                imported_file.parse_status = ParseStatus.FAILED
+                db.add(imported_file)
+                db.commit()
+                db.refresh(imported_file)
+                logger.exception("BSR file parse failed: task_id=%s file_id=%s", task_id, imported_file.id)
 
         logger.info("File uploaded successfully: task_id=%s file_id=%s", task_id, imported_file.id)
 

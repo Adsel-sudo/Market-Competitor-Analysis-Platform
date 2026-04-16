@@ -28,9 +28,13 @@ backend/
     models/
       task_models.py    # ORM 模型（任务、输入、文件、快照、结果）
     routers/
-      tasks.py          # 任务相关接口
+      tasks.py          # 任务创建/详情接口
+      uploads.py        # 文件上传与解析接口
     schemas/
       task.py           # Pydantic 请求/响应模型
+    services/
+      parser_sellersprite_bsr.py  # 卖家精灵 BSR Excel 解析
+      competitor_service.py       # 竞品快照批量入库
     main.py             # FastAPI 应用入口
   requirements.txt
 ```
@@ -74,99 +78,6 @@ uvicorn app.main:app --reload
 - Swagger 文档：`/docs`
 
 
-## 测试与验证方法（当前代码）
-
-当前仓库还没有内置 `pytest` 等自动化测试用例（`backend/requirements.txt` 中也未包含测试依赖），因此建议采用「启动服务 + 接口回归」的方式进行验证。以下命令为 Windows PowerShell 友好写法。
-
-### 1) 基础运行检查
-
-```powershell
-cd backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-Copy-Item .env.example .env
-python app/init_db.py
-uvicorn app.main:app --reload
-```
-
-预期：
-- 服务正常启动且无导入错误
-- SQLite 本地库可连接并成功建表（`test.db`）
-
-### 2) 健康检查
-
-```powershell
-Invoke-RestMethod -Uri "http://127.0.0.1:8000/health" -Method Get
-```
-
-预期返回：
-
-```json
-{"status":"ok"}
-```
-
-### 3) 任务创建接口（POST /api/tasks）
-
-```powershell
-$body = @{
-  title = "竞品监测任务-示例"
-  task_type = "competitor_analysis"
-  inputs = @(
-    @{ input_type = "keyword"; input_value = "AI 编程" }
-    @{ input_type = "url"; input_value = "https://example.com" }
-  )
-} | ConvertTo-Json -Depth 5
-
-Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/tasks" `
-  -Method Post `
-  -ContentType "application/json" `
-  -Body $body
-```
-
-预期：
-- HTTP `201`
-- 返回 `id` 和 `status`（通常为 `created`）
-
-### 4) 任务详情接口（GET /api/tasks/{task_id}）
-
-将上一步返回的 `id` 代入：
-
-```powershell
-Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/tasks/1" -Method Get
-```
-
-预期：
-- HTTP `200`
-- 返回任务基础信息与 `inputs` 列表
-
-### 5) 文件上传接口（POST /api/tasks/{task_id}/upload）
-
-```powershell
-curl.exe -X POST "http://127.0.0.1:8000/api/tasks/1/upload" `
-  -F "file=@C:\absolute\path\to\sample.xlsx"
-```
-
-预期：
-- HTTP `200`
-- 返回 `file_id`、`file_name`、`parse_status`
-- 物理文件保存到 `backend/uploads/<task_id>/` 下
-
-### 6) 负向用例建议
-
-可额外验证以下错误场景：
-- 上传非 `.xlsx` 文件，应返回 `400`
-- 上传到不存在的 `task_id`，应返回 `404`
-- 查询不存在的任务详情，应返回 `404`
-- 创建任务时 `inputs` 为空，应触发请求参数校验错误（`422`）
-
-### 7) 下一步自动化测试建议
-
-当前阶段建议后续补充：
-- `pytest` + `fastapi.testclient` / `httpx` 的 API 集成测试
-- 对数据库访问层进行事务回滚隔离测试
-- 将上述核心与负向用例纳入 CI 执行
-
 ## 环境变量
 
 `backend/.env.example` 中提供了基础配置项：
@@ -186,7 +97,19 @@ curl.exe -X POST "http://127.0.0.1:8000/api/tasks/1/upload" `
 
 - 创建分析任务（`analysis_task`）
 - 写入任务输入（`task_input`）
+- 支持任务输入类型：`asin` / `product_url` / `keyword` / `bsr_url` / `shop_url`
+- 上传 `.xlsx` 文件并写入 `imported_file`
+- 文件名包含 `BSR` 时，同步解析 Excel 并批量写入 `competitor_snapshot`
 - 基础健康检查
+
+## BSR 上传解析说明
+
+- 上传接口：`POST /api/tasks/{task_id}/upload`
+- 文件名包含 `BSR`（大小写不敏感）时：
+  1. 解析第一个有效 sheet（必须包含 `asin` 和 `title` 列，支持中英文列名）
+  2. 自动清洗数值字段（price/rating/review_count）
+  3. 批量写入 `competitor_snapshot`（`asin` 为空会跳过）
+  4. 更新 `imported_file.parse_status` 为 `parsed`；解析失败则为 `failed`
 
 ## 下一步建议（面向容器化与服务器迁移）
 
