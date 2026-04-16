@@ -6,14 +6,14 @@
 
 - 阶段：本地 MVP 验证
 - 运行方式：本地 Python + FastAPI
-- 数据库：PostgreSQL（通过 `.env` 配置）
+- 数据库：SQLite（本地开发默认）/ PostgreSQL（生产环境）
 - 后续规划：Docker 化、迁移到服务器、补齐任务执行和报表能力
 
 ## 技术栈
 
 - FastAPI
 - SQLAlchemy（同步）
-- PostgreSQL（`psycopg2-binary`）
+- SQLite（本地开发验证）+ PostgreSQL（生产）
 - Pydantic / pydantic-settings
 - Uvicorn
 
@@ -41,28 +41,29 @@ backend/
 
 1. 创建并激活虚拟环境
 
-```bash
+```powershell
 cd backend
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+.\.venv\Scripts\Activate.ps1
 ```
 
 2. 安装依赖
 
-```bash
+```powershell
 pip install -r requirements.txt
 ```
 
 3. 准备环境变量
 
-```bash
-cp .env.example .env
-# 按本地 PostgreSQL 实际配置修改 .env
+```powershell
+Copy-Item .env.example .env
+# 默认使用 SQLite（sqlite:///./test.db）做本地验证
+# 生产环境请改为 PostgreSQL DATABASE_URL 或 DB_* 参数
 ```
 
 4. 启动服务
 
-```bash
+```powershell
 uvicorn app.main:app --reload
 ```
 
@@ -75,28 +76,28 @@ uvicorn app.main:app --reload
 
 ## 测试与验证方法（当前代码）
 
-当前仓库还没有内置 `pytest` 等自动化测试用例（`backend/requirements.txt` 中也未包含测试依赖），因此建议采用「启动服务 + 接口回归」的方式进行验证。
+当前仓库还没有内置 `pytest` 等自动化测试用例（`backend/requirements.txt` 中也未包含测试依赖），因此建议采用「启动服务 + 接口回归」的方式进行验证。以下命令为 Windows PowerShell 友好写法。
 
 ### 1) 基础运行检查
 
-```bash
+```powershell
 cd backend
 python -m venv .venv
-source .venv/bin/activate
+.\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-cp .env.example .env
+Copy-Item .env.example .env
 python app/init_db.py
 uvicorn app.main:app --reload
 ```
 
 预期：
 - 服务正常启动且无导入错误
-- 数据库可连接并成功建表
+- SQLite 本地库可连接并成功建表（`test.db`）
 
 ### 2) 健康检查
 
-```bash
-curl -s http://127.0.0.1:8000/health
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/health" -Method Get
 ```
 
 预期返回：
@@ -107,17 +108,20 @@ curl -s http://127.0.0.1:8000/health
 
 ### 3) 任务创建接口（POST /api/tasks）
 
-```bash
-curl -s -X POST http://127.0.0.1:8000/api/tasks \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "title": "竞品监测任务-示例",
-    "task_type": "competitor_analysis",
-    "inputs": [
-      {"input_type": "keyword", "input_value": "AI 编程"},
-      {"input_type": "url", "input_value": "https://example.com"}
-    ]
-  }'
+```powershell
+$body = @{
+  title = "竞品监测任务-示例"
+  task_type = "competitor_analysis"
+  inputs = @(
+    @{ input_type = "keyword"; input_value = "AI 编程" }
+    @{ input_type = "url"; input_value = "https://example.com" }
+  )
+} | ConvertTo-Json -Depth 5
+
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/tasks" `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body $body
 ```
 
 预期：
@@ -128,8 +132,8 @@ curl -s -X POST http://127.0.0.1:8000/api/tasks \
 
 将上一步返回的 `id` 代入：
 
-```bash
-curl -s http://127.0.0.1:8000/api/tasks/1
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/tasks/1" -Method Get
 ```
 
 预期：
@@ -138,9 +142,9 @@ curl -s http://127.0.0.1:8000/api/tasks/1
 
 ### 5) 文件上传接口（POST /api/tasks/{task_id}/upload）
 
-```bash
-curl -s -X POST http://127.0.0.1:8000/api/tasks/1/upload \
-  -F 'file=@/absolute/path/to/sample.xlsx'
+```powershell
+curl.exe -X POST "http://127.0.0.1:8000/api/tasks/1/upload" `
+  -F "file=@C:\absolute\path\to\sample.xlsx"
 ```
 
 预期：
@@ -169,11 +173,14 @@ curl -s -X POST http://127.0.0.1:8000/api/tasks/1/upload \
 
 - `APP_NAME`
 - `DEBUG`
+- `DATABASE_URL`（本地默认 SQLite；生产建议 PostgreSQL）
 - `DB_HOST`
 - `DB_PORT`
 - `DB_USER`
 - `DB_PASSWORD`
 - `DB_NAME`
+
+> 注意：SQLite 仅用于本地开发验证与快速联调，不作为生产数据库。生产环境仍使用 PostgreSQL。
 
 ## 已有能力（MVP）
 
