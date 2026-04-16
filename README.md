@@ -72,6 +72,97 @@ uvicorn app.main:app --reload
 - 创建任务：`POST /api/tasks`
 - Swagger 文档：`/docs`
 
+
+## 测试与验证方法（当前代码）
+
+当前仓库还没有内置 `pytest` 等自动化测试用例（`backend/requirements.txt` 中也未包含测试依赖），因此建议采用「启动服务 + 接口回归」的方式进行验证。
+
+### 1) 基础运行检查
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+python app/init_db.py
+uvicorn app.main:app --reload
+```
+
+预期：
+- 服务正常启动且无导入错误
+- 数据库可连接并成功建表
+
+### 2) 健康检查
+
+```bash
+curl -s http://127.0.0.1:8000/health
+```
+
+预期返回：
+
+```json
+{"status":"ok"}
+```
+
+### 3) 任务创建接口（POST /api/tasks）
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/api/tasks \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "title": "竞品监测任务-示例",
+    "task_type": "competitor_analysis",
+    "inputs": [
+      {"input_type": "keyword", "input_value": "AI 编程"},
+      {"input_type": "url", "input_value": "https://example.com"}
+    ]
+  }'
+```
+
+预期：
+- HTTP `201`
+- 返回 `id` 和 `status`（通常为 `created`）
+
+### 4) 任务详情接口（GET /api/tasks/{task_id}）
+
+将上一步返回的 `id` 代入：
+
+```bash
+curl -s http://127.0.0.1:8000/api/tasks/1
+```
+
+预期：
+- HTTP `200`
+- 返回任务基础信息与 `inputs` 列表
+
+### 5) 文件上传接口（POST /api/tasks/{task_id}/upload）
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/api/tasks/1/upload \
+  -F 'file=@/absolute/path/to/sample.xlsx'
+```
+
+预期：
+- HTTP `200`
+- 返回 `file_id`、`file_name`、`parse_status`
+- 物理文件保存到 `backend/uploads/<task_id>/` 下
+
+### 6) 负向用例建议
+
+可额外验证以下错误场景：
+- 上传非 `.xlsx` 文件，应返回 `400`
+- 上传到不存在的 `task_id`，应返回 `404`
+- 查询不存在的任务详情，应返回 `404`
+- 创建任务时 `inputs` 为空，应触发请求参数校验错误（`422`）
+
+### 7) 下一步自动化测试建议
+
+当前阶段建议后续补充：
+- `pytest` + `fastapi.testclient` / `httpx` 的 API 集成测试
+- 对数据库访问层进行事务回滚隔离测试
+- 将上述核心与负向用例纳入 CI 执行
+
 ## 环境变量
 
 `backend/.env.example` 中提供了基础配置项：
