@@ -1,6 +1,7 @@
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from sqlalchemy.engine import URL
 
 
 class Settings(BaseSettings):
@@ -17,9 +18,15 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
-        return (
-            f"postgresql+psycopg2://{self.db_user}:{self.db_password}"
-            f"@{self.db_host}:{self.db_port}/{self.db_name}"
+        return str(
+            URL.create(
+                drivername="postgresql+psycopg2",
+                username=self.db_user,
+                password=self.db_password,
+                host=self.db_host,
+                port=self.db_port,
+                database=self.db_name,
+            )
         )
 
 
