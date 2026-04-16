@@ -1,35 +1,37 @@
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from sqlalchemy.engine import URL
 
 
 class Settings(BaseSettings):
     app_name: str = "Internal Tools API"
     debug: bool = False
 
-    db_host: str = "localhost"
-    db_port: int = 5432
-    db_user: str = "postgres"
-    db_password: str = "postgres"
-    db_name: str = "postgres"
+    DATABASE_URL: str | None = None
+    DB_HOST: str = "localhost"
+    DB_PORT: int = 5432
+    DB_USER: str = "postgres"
+    DB_PASSWORD: str = "postgres"
+    DB_NAME: str = "postgres"
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property
     def database_url(self) -> str:
-        return str(
-            URL.create(
-                drivername="postgresql+psycopg2",
-                username=self.db_user,
-                password=self.db_password,
-                host=self.db_host,
-                port=self.db_port,
-                database=self.db_name,
-            )
+        if self.DATABASE_URL:
+            return self.DATABASE_URL
+
+        return (
+            "postgresql+psycopg2://"
+            f"{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
         )
 
 
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+
+
+_settings = get_settings()
+print(f"DATABASE_URL raw: {_settings.DATABASE_URL}")
+print(f"DATABASE_URL resolved: {_settings.database_url}")

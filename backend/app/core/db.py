@@ -1,6 +1,5 @@
 from collections.abc import Generator
 import logging
-import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
@@ -15,8 +14,11 @@ class Base(DeclarativeBase):
     pass
 
 
-database_url = os.getenv("DATABASE_URL", settings.database_url)
-is_sqlite = "sqlite" in database_url.lower()
+database_url = settings.database_url
+is_sqlite = database_url.lower().startswith("sqlite")
+
+db_type = "SQLite" if is_sqlite else "PostgreSQL"
+print(f"Current database type: {db_type}")
 
 if is_sqlite:
     logger.info("Using SQLite database: %s", database_url)
