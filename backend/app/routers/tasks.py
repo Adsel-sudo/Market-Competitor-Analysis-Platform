@@ -1,12 +1,18 @@
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.db import get_db
 from app.models.task_models import AnalysisTask, TaskInput, TaskStatus
-from app.schemas.task import TaskCreateRequest, TaskCreateResponse
+from app.schemas.task import (
+    TaskCreateRequest,
+    TaskCreateResponse,
+    TaskDetailResponse,
+    TaskInputResponse,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -44,4 +50,39 @@ def create_task(payload: TaskCreateRequest, db: Session = Depends(get_db)) -> Ta
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to create task",
+        )
+
+
+@router.get("/{task_id}", response_model=TaskDetailResponse)
+def get_task_detail(task_id: int, db: Session = Depends(get_db)) -> TaskDetailResponse:
+    try:
+        statement = (
+            select(AnalysisTask)
+            .options(selectinload(AnalysisTask.inputs))
+            .where(AnalysisTask.id == task_id)
+        )
+        task = db.execute(statement).scalar_one_or_none()
+
+        if task is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+
+        return TaskDetailResponse(
+            id=task.id,
+            title=task.title,
+            status=task.status,
+            task_type=task.task_type,
+            inputs=[
+                TaskInputResponse(input_type=item.input_type, input_value=item.input_value)
+                for item in task.inputs
+            ],
+            created_at=task.created_at,
+            updated_at=task.updated_at,
+        )
+    except HTTPException:
+        raise
+    except SQLAlchemyError:
+        logger.exception("Failed to fetch task detail: id=%s", task_id)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to fetch task detail",
         )
