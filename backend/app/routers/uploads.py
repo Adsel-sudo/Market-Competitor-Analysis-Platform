@@ -37,10 +37,12 @@ def upload_task_file(
     saved_file_path: Path | None = None
 
     try:
+        # 1. 校验 task 是否存在
         task = db.get(AnalysisTask, task_id)
         if task is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
 
+        # 2. 保存上传文件到 uploads/{task_id}/
         task_upload_dir = (UPLOADS_ROOT / str(task_id)).resolve()
         task_upload_dir.mkdir(parents=True, exist_ok=True)
 
@@ -59,6 +61,7 @@ def upload_task_file(
 
         relative_file_path = saved_file_path.relative_to(BASE_DIR)
 
+        # 3. 插入 imported_file，初始 parse_status = pending
         imported_file = ImportedFile(
             task_id=task_id,
             file_name=new_file_name,
@@ -69,16 +72,27 @@ def upload_task_file(
         db.commit()
         db.refresh(imported_file)
 
+        # 4. 根据文件名判断并触发 BSR 解析
         if "bsr" in safe_original_name.lower():
+            logger.info(
+                "开始解析 BSR 文件: task_id=%s file_id=%s file_name=%s file_path=%s",
+                task_id,
+                imported_file.id,
+                safe_original_name,
+                saved_file_path,
+            )
             try:
                 parsed_data = parse_bsr(str(saved_file_path))
+                if not parsed_data:
+                    raise ValueError("parse_bsr returned empty data")
+
                 save_competitors(db=db, task_id=task_id, data=parsed_data)
                 imported_file.parse_status = ParseStatus.PARSED
                 db.add(imported_file)
                 db.commit()
                 db.refresh(imported_file)
                 logger.info(
-                    "BSR file parsed successfully: task_id=%s file_id=%s rows=%s",
+                    "BSR 文件解析成功: task_id=%s file_id=%s 写入 competitor 数据=%s",
                     task_id,
                     imported_file.id,
                     len(parsed_data),
@@ -89,10 +103,11 @@ def upload_task_file(
                 db.add(imported_file)
                 db.commit()
                 db.refresh(imported_file)
-                logger.exception("BSR file parse failed: task_id=%s file_id=%s", task_id, imported_file.id)
+                logger.exception("BSR 文件解析失败: task_id=%s file_id=%s", task_id, imported_file.id)
 
         logger.info("File uploaded successfully: task_id=%s file_id=%s", task_id, imported_file.id)
 
+        # 5. 返回 file_id / file_name / parse_status
         return UploadFileResponse(
             file_id=imported_file.id,
             file_name=imported_file.file_name,
