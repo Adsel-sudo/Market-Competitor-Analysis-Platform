@@ -1,0 +1,25 @@
+.venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+.git/
+.gitignore
+
+# Local runtime artifacts
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.tmp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Local env files
+.env
+.env.*
+
+# Local data and uploads
+uploads/
+test.db
