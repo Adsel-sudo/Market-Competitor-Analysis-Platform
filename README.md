@@ -1,28 +1,21 @@
 # Market Competitor Analysis Platform (MVP)
 
-本项目是一个**市场/竞品分析平台**的内部 MVP（最小可行版本）。
-当前阶段重点是**竞品分析模块**，已打通“任务创建 → BSR 文件上传 → 自动解析 → 竞品快照入库”链路。
+本项目是一个面向内部研发联调的**市场/竞品分析平台 MVP（最小可行版本）**。
+当前重点是打通“任务创建 → 文件上传 → BSR 解析 → 分析展示”链路。
 
-## 当前阶段
+## 项目现状（MVP）
 
-- 阶段：内部工具 MVP 验证阶段
-- 重点模块：竞品分析（Competitor Analysis）
-- 开发运行方式：
-  - 本地 Python + FastAPI
-  - Docker Compose（开发环境）
-- 当前开发数据库：SQLite（`test.db`）
-- 生产规划：后续可切换 PostgreSQL（当前仓库未提供生产级部署方案）
+- 后端：FastAPI + Docker Compose + SQLite
+- 前端：Next.js 本地开发模式（`npm run dev`）
+- 当前为 MVP：分析结果为 **mock + 部分真实数据（BSR 解析入库）**
+- 暂未提供生产级部署方案（后续可扩展 PostgreSQL / 监控 / 网关）
 
-## 当前能力（MVP）
+## 当前功能进度
 
-- 创建分析任务（`analysis_task`）
-- 写入任务输入（`task_input`）
-- 支持任务输入类型：`asin` / `product_url` / `keyword` / `bsr_url` / `shop_url`
-- 上传 `.xlsx` 文件并写入 `imported_file`
-- 文件名包含 `BSR`（大小写不敏感）时，自动解析 Excel
-- 解析后批量写入 `competitor_snapshot`
-- 更新 `imported_file.parse_status`（`pending` / `parsed` / `failed`）
-- 提供基础健康检查接口
+- ✅ 前端：已支持竞品分析详情页（`/competitor-analysis/[id]`，含 API 请求 + 本地 fallback）
+- ✅ 后端：已支持任务创建（`/api/tasks`）
+- ✅ 后端：已支持文件上传 + BSR 解析（`/api/tasks/{task_id}/upload`）
+- ✅ 后端：已支持竞品分析 mock 接口（`/api/competitor-analysis/{task_id}`）
 
 ## 技术栈
 
@@ -60,7 +53,9 @@ backend/
 docker-compose.yml      # 开发环境编排（仅 backend）
 ```
 
-## Docker 开发启动方式（推荐）
+## 开发环境启动方式
+
+### 1) 后端（Docker Compose）
 
 > 说明：当前 Docker 配置仅用于**本地开发与联调**，用于提升启动一致性与热更新体验。  
 > **这不是生产部署方案**（未包含生产级进程管理、安全加固、反向代理、监控等）。
@@ -77,21 +72,15 @@ Copy-Item backend/.env.example backend/.env
 docker compose up --build
 ```
 
-3. 访问服务
-
-- API: `http://localhost:8000`
-- Swagger: `http://localhost:8000/docs`
-- 健康检查：`GET /health`
-
-4. 停止服务
+3. 停止服务
 
 ```powershell
 docker compose down
 ```
 
-## 前端启动方式（Next.js）
+### 2) 前端（Next.js 本地运行）
 
-> 说明：当前仓库的 Docker Compose 仅包含 `backend`。前端请在本地 Node 环境启动。
+> 说明：当前 Docker Compose 仅包含后端服务，前端使用本地 Node 环境启动。
 
 ```powershell
 cd frontend
@@ -99,10 +88,18 @@ npm install
 npm run dev
 ```
 
-访问：
+建议新增 `frontend/.env.local`：
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
+```
+
+## 访问地址说明
 
 - 前端首页：`http://localhost:3000`
-- 竞品分析详情页（mock）：`http://localhost:3000/competitor-analysis/demo`
+- 竞品分析页：`http://localhost:3000/competitor-analysis/demo`
+- 后端 API：`http://127.0.0.1:8000`
+- Swagger：`http://127.0.0.1:8000/docs`
 
 ### Compose 挂载说明（开发用途）
 
