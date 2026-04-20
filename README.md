@@ -89,6 +89,21 @@ docker compose up --build
 docker compose down
 ```
 
+## 前端启动方式（Next.js）
+
+> 说明：当前仓库的 Docker Compose 仅包含 `backend`。前端请在本地 Node 环境启动。
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+访问：
+
+- 前端首页：`http://localhost:3000`
+- 竞品分析详情页（mock）：`http://localhost:3000/competitor-analysis/demo`
+
 ### Compose 挂载说明（开发用途）
 
 - `./backend:/app`：挂载源码，支持 `uvicorn --reload` 热更新

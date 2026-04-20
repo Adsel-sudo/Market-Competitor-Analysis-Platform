@@ -38,10 +38,28 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
+# Frontend (Next.js / Node)
+**/node_modules/
+**/.next/
+**/out/
+**/.turbo/
+next-env.d.ts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Frontend env overrides
+.env.local
+.env.*.local
+
 # Local sqlite / temp data
 *.sqlite3
 *.db
 *.tmp
+
+# Local uploads (generated / test data)
+backend/uploads/
 
 # Docker / container local overrides
 .docker/
