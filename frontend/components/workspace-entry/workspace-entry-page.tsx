@@ -38,7 +38,7 @@ export function WorkspaceEntryPage() {
 
       <SectionContainer className="flex min-h-[calc(100vh-62px)] w-full max-w-[1660px] flex-col px-5 py-6 lg:px-8 xl:px-12">
         <div className="grid h-full flex-1 grid-cols-1 gap-4 lg:grid-cols-[minmax(0,72fr)_minmax(350px,28fr)] lg:gap-4">
-          <div className="rounded-[24px] border border-[#e3e0e8] bg-[#fffdf9] p-7 shadow-[0_10px_24px_rgba(68,50,105,0.05)] lg:p-8 xl:p-9">
+          <div className="rounded-[24px] border border-[#e3e0e8] bg-[#ffffff] p-7 shadow-[0_10px_24px_rgba(68,50,105,0.05)] lg:p-8 xl:p-9">
             <FeatureEntryPanel options={workspaceModuleOptions} onSelect={jumpToDataPrep} />
           </div>
 
