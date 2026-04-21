@@ -11,7 +11,7 @@ export function FeatureEntryButton({ option, onClick }: FeatureEntryButtonProps)
       type="button"
       onClick={onClick}
       className={[
-        "group w-full rounded-[20px] border border-[#e3e0e8] bg-[#fffdf9] px-7 py-6 text-left transition duration-200",
+        "group w-full rounded-[20px] border border-[#e3e0e8] bg-[#ffffff] px-7 py-6 text-left transition duration-200",
         "hover:-translate-y-0.5 hover:border-[#b8abeb] hover:bg-[#faf7ff] hover:shadow-[0_12px_24px_rgba(108,91,176,0.12)]",
       ].join(" ")}
     >

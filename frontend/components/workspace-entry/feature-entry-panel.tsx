@@ -9,17 +9,17 @@ type FeatureEntryPanelProps = {
 
 export function FeatureEntryPanel({ options, onSelect }: FeatureEntryPanelProps) {
   return (
-    <section className="h-full">
-      <h1 className="text-[30px] font-semibold leading-[1.2] tracking-tight text-[#1f1731] lg:text-[38px]">
-        <span className="bg-[linear-gradient(120deg,#744dff_0%,#8d6dff_52%,#a17cff_100%)] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(133,102,235,0.25)]">
+    <section className="flex h-full items-center pt-4 lg:pt-6">
+      <div className="mx-auto w-[90%] max-w-[864px]">
+        <h1 className="text-[28px] font-semibold leading-[1.2] tracking-tight text-[#000000] lg:text-[34px]">
           开始一次市场分析任务
-        </span>
-      </h1>
+        </h1>
 
-      <div className="mt-10 ml-0.5 flex max-w-[960px] flex-col gap-5">
-        {options.map((option) => (
-          <FeatureEntryButton key={option.key} option={option} onClick={() => onSelect(option.key)} />
-        ))}
+        <div className="mt-10 flex flex-col gap-5">
+          {options.map((option) => (
+            <FeatureEntryButton key={option.key} option={option} onClick={() => onSelect(option.key)} />
+          ))}
+        </div>
       </div>
     </section>
   );
