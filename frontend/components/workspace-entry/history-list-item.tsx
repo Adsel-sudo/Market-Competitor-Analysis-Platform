@@ -19,9 +19,9 @@ export function HistoryListItem({ task, onOpen, isActive = false }: HistoryListI
       type="button"
       onClick={onOpen}
       className={cn(
-        "w-full rounded-xl border px-3.5 py-3 text-left transition-all duration-150",
-        "border-transparent bg-white/40 hover:border-[#d9d2eb] hover:bg-white/90",
-        isActive && "border-[#b8abeb] bg-[linear-gradient(135deg,#7566d8_0%,#8b7de5_100%)] text-white shadow-[0_10px_20px_rgba(109,93,187,0.24)]",
+        "w-full rounded-lg px-3 py-3 text-left transition-all duration-150",
+        "bg-transparent hover:-translate-y-0.5 hover:bg-[#faf7ff] hover:shadow-[0_10px_20px_rgba(108,91,176,0.1)]",
+        isActive && "bg-[linear-gradient(135deg,#7566d8_0%,#8b7de5_100%)] text-white shadow-[0_10px_20px_rgba(109,93,187,0.24)]",
       )}
     >
       <div className="flex flex-wrap items-center gap-2">
