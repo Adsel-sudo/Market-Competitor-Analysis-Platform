@@ -33,7 +33,7 @@ export function WorkspaceEntryPage() {
   };
 
   return (
-    <PageShell className="min-h-screen bg-[#fbfafe] px-0 py-0">
+    <PageShell className="min-h-screen bg-[linear-gradient(180deg,#fcf6f4_0%,#f8f4f8_100%)] px-0 py-0">
       <WorkspaceHeader />
 
       <SectionContainer className="flex min-h-[calc(100vh-72px)] w-full max-w-[1660px] flex-col px-5 py-8 lg:px-8 xl:px-12">
