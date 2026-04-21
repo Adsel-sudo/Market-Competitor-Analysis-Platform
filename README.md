@@ -94,6 +94,19 @@ npm run dev
 NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
 ```
 
+
+## Tailwind 样式规范（`@apply` 与毛玻璃）
+
+1. `@apply` 中**禁止**使用 slash opacity 写法：如 `bg-white/72`、`text-black/80`、`border-white/20`。  
+2. `@apply` 中**禁止**使用任意值颜色表达式：如 `text-[color:var(--text-primary)]`、`bg-[rgba(...)]`。  
+3. `@apply` 中**禁止**引用自定义类名（仅允许 Tailwind 官方 utility）；例如不要 `@apply text-primary`。  
+4. 透明背景请改用原生 CSS：`background-color: rgba(...)`；边框透明度用 `border-color: rgba(...)`。  
+5. 文本透明度/主题色优先用 CSS 变量：`color: var(--text-primary)`；避免在 `@apply` 中混入复杂颜色逻辑。  
+6. 毛玻璃建议采用“分层写法”：`@apply ... backdrop-blur-*` + `background-color: rgba(...)` + `box-shadow`。  
+7. 基础组件类按语义收敛到 `@layer components`：如 `.btn-*`、`.glass-card`、`.surface-card`、`.ui-input`。  
+8. 组件类职责拆分：`@apply` 负责布局/间距/圆角/排版，原生 CSS 负责颜色、渐变、透明度与阴影。  
+9. 新增基础样式前，先复用现有组件类；确需新增时保持命名统一（`btn-` / `ui-` / `*-card`）。
+
 ## 访问地址说明
 
 - 前端首页：`http://localhost:3000`
