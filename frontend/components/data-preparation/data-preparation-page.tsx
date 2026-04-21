@@ -80,14 +80,16 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
     <PageShell className="h-screen overflow-hidden px-5 pt-2 lg:px-8 lg:pt-3 xl:px-12">
       <SectionContainer className="flex h-full flex-col space-y-3">
         <div className="mx-auto flex w-full max-w-[1820px] items-center justify-between gap-3 px-6 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-4 lg:px-8">
-          <h1 className="shrink-0 whitespace-nowrap text-[34px] font-semibold leading-none tracking-tight text-[#4a3f63]">数据准备</h1>
+          <h1 className="-ml-[25px] shrink-0 whitespace-nowrap text-[34px] font-semibold leading-none tracking-tight text-[#4a3f63]">
+            数据准备
+          </h1>
           <header className="glass-card flex min-w-0 flex-1 items-center justify-between rounded-[24px] px-4 py-2 lg:px-7">
             <SecondaryButton onClick={() => router.push("/")}>← 返回工作台</SecondaryButton>
             <span className="rounded-full bg-[color:var(--accent-secondary)] px-3 py-1 text-xs text-[color:var(--accent-primary)]">
               进度 {completedCount}/3
             </span>
           </header>
-          <PrimaryButton className="shrink-0 lg:justify-self-end" onClick={jumpToPage3}>
+          <PrimaryButton className="shrink-0 translate-x-[20px] lg:justify-self-end" onClick={jumpToPage3}>
             开始分析
           </PrimaryButton>
         </div>
