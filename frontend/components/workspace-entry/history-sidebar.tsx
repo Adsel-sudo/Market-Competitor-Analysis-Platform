@@ -9,7 +9,7 @@ type HistorySidebarProps = {
 
 export function HistorySidebar({ tasks, onOpenTask }: HistorySidebarProps) {
   return (
-    <aside className="h-full rounded-[24px] border border-[#e3e0e8] bg-[#fffdf9] p-5 lg:p-6">
+    <aside className="h-full rounded-[24px] border border-[#e3e0e8] bg-[#ffffff] p-5 lg:p-6">
       <div className="mb-3 border-b border-[#e6e1eb] pb-4">
         <h2 className="text-base font-semibold text-[#302a3a]">历史分析</h2>
         <p className="text-xs text-[#6f6891]">最近 {tasks.length} 条</p>
