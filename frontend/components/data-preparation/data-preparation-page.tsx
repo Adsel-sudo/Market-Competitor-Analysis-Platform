@@ -36,39 +36,43 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
   };
 
   return (
-    <PageShell className="h-screen overflow-hidden px-5 pt-3 lg:px-8 lg:pt-4 xl:px-12">
-      <SectionContainer className="flex h-full flex-col space-y-4">
-        <header className="glass-card mx-auto flex w-[70%] max-w-[952px] items-center justify-between rounded-[30px] px-6 py-3 lg:px-8">
-          <SecondaryButton onClick={() => router.push("/")}>← 返回工作台</SecondaryButton>
-          <span className="rounded-full bg-[color:var(--accent-secondary)] px-2.5 py-1 text-xs text-[color:var(--accent-primary)]">
-            当前状态：等待数据准备
-          </span>
-        </header>
+    <PageShell className="h-screen overflow-hidden px-5 pt-2 lg:px-8 lg:pt-3 xl:px-12">
+      <SectionContainer className="flex h-full flex-col space-y-3">
+        <div className="mx-auto flex w-full max-w-[1220px] items-center justify-center gap-5">
+          <header className="glass-card flex w-[64%] max-w-[860px] items-center justify-between rounded-[24px] px-5 py-2 lg:px-7">
+            <SecondaryButton onClick={() => router.push("/")}>← 返回工作台</SecondaryButton>
+            <span className="rounded-full bg-[color:var(--accent-secondary)] px-3 py-1 text-xs text-[color:var(--accent-primary)]">
+              进度 {completedCount}/3
+            </span>
+          </header>
+          <PrimaryButton onClick={jumpToPage3}>开始分析</PrimaryButton>
+        </div>
 
-        <GlassCard className="mx-auto flex min-h-0 w-full max-w-[1820px] flex-1 flex-col space-y-6 p-6 lg:p-8">
+        <GlassCard className="mx-auto flex min-h-0 w-full max-w-[1820px] flex-1 flex-col space-y-5 p-6 pt-4 lg:p-8 lg:pt-5">
           <div className="flex items-start justify-between shrink-0">
             <h1 className="text-[34px] font-semibold leading-none tracking-tight text-[#4a3f63]">数据准备</h1>
-            <span className="rounded-full bg-white/70 px-3 py-1 text-xs text-secondary">进度 {completedCount}/3</span>
           </div>
 
-          <div className="grid min-h-0 flex-1 gap-5 lg:grid-cols-[74px_minmax(0,1fr)]">
-            <aside className="hidden lg:flex lg:justify-center">
-              <div className="relative mt-2 flex h-full min-h-[520px] w-10 items-start justify-center">
+          <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[72px_minmax(0,1fr)]">
+            <aside className="hidden lg:flex lg:items-center lg:justify-center">
+              <div className="relative flex h-[84%] min-h-[500px] w-10 items-center justify-center">
                 <div className="h-full w-[4px] rounded-full bg-[#d8d2e0]" />
-                <div className="absolute left-1/2 top-5 h-5 w-5 -translate-x-1/2 rounded-full border-4 border-white bg-[color:var(--accent-primary)] shadow-[0_0_0_4px_rgba(117,102,216,0.2)]" />
-                {steps.slice(1).map((_, index) => (
+                {steps.map((step, index) => (
                   <div
-                    key={index}
+                    key={step.id}
                     className={cn(
-                      "absolute left-1/2 h-3 w-3 -translate-x-1/2 rounded-full",
-                      index === 0 ? "top-[35%] bg-[#c7bfce]" : "top-[67%] bg-[#c7bfce]",
+                      "absolute left-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2",
+                      step.completed
+                        ? "border-[color:var(--accent-primary)] bg-[color:var(--accent-primary)]"
+                        : "border-[#cdbfe0] bg-white",
                     )}
+                    style={{ top: `${(index / Math.max(steps.length - 1, 1)) * 100}%` }}
                   />
                 ))}
               </div>
             </aside>
 
-            <div className="min-h-0 space-y-3 overflow-y-auto pr-2">
+            <div className="space-y-3">
               {steps.map((step, index) => (
                 <StepCard
                   key={step.id}
@@ -82,7 +86,7 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
             </div>
           </div>
 
-          <div className="shrink-0 pt-1">
+          <div className="shrink-0 pt-1 lg:hidden">
             <PrimaryButton onClick={jumpToPage3}>开始分析</PrimaryButton>
           </div>
         </GlassCard>
