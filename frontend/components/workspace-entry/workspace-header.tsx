@@ -1,7 +1,7 @@
 export function WorkspaceHeader() {
   return (
     <header className="relative flex w-full justify-center px-5 pt-4 lg:px-8 lg:pt-5 xl:px-12">
-      <div className="glass-card flex w-full max-w-[1620px] items-center justify-between rounded-[30px] px-6 py-3 lg:px-8">
+      <div className="glass-card mx-auto flex w-[70%] max-w-[1134px] items-center justify-between rounded-[30px] px-6 py-3 lg:px-8">
         <p className="text-sm font-semibold tracking-wide text-[#8f8898]">Market Analysis Platform</p>
         <button
           type="button"

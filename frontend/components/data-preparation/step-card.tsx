@@ -49,20 +49,13 @@ export function StepCard({ index, step, note, onToggleComplete, onNoteChange }: 
         </div>
 
         {step.type === "upload" ? (
-          <div className="mt-4 grid items-center gap-4 rounded-2xl bg-white/45 p-4 lg:grid-cols-[minmax(220px,1fr)_minmax(280px,1.2fr)_minmax(250px,0.9fr)]">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-secondary">Step {index + 1}</p>
-              <p className="mt-1 text-xl font-semibold text-primary">{step.title}</p>
-              <p className="mt-2 text-sm text-secondary">{step.description}</p>
-            </div>
-
+          <div className="mt-4 grid items-center gap-4 rounded-2xl bg-white/45 p-4 lg:grid-cols-[minmax(280px,1.2fr)_minmax(250px,0.9fr)]">
             <button
               type="button"
               onClick={() => setShowPreview(true)}
               className="group relative mx-auto flex h-28 w-full max-w-[360px] items-center justify-center overflow-hidden rounded-xl bg-[linear-gradient(135deg,#f3efff_0%,#ebe5ff_100%)]"
             >
               <div className="h-[78%] w-[86%] rounded-lg bg-[linear-gradient(180deg,#ffffff_0%,#f4f0ff_100%)]" />
-              <span className="absolute bottom-2 text-xs text-secondary transition group-hover:text-primary">点击查看大图</span>
             </button>
 
             <button
@@ -71,7 +64,6 @@ export function StepCard({ index, step, note, onToggleComplete, onNoteChange }: 
               className="flex min-h-[130px] w-full flex-col justify-center rounded-xl border border-dashed border-[#cdc4da] bg-white/70 px-4 text-left transition hover:bg-white"
             >
               <p className="text-sm font-medium text-primary">点击或拖拽上传</p>
-              <p className="mt-1 text-xs text-secondary">支持 .xlsx / .html / .png</p>
               <div className="mt-3 flex items-center gap-2 rounded-lg bg-[#f7f5ff] px-3 py-2">
                 <span className="text-sm">📎</span>
                 <span className="text-xs text-secondary">{step.id === "step-1" ? "BSR_data.xlsx" : "listing_snapshot.html"}</span>
@@ -96,19 +88,21 @@ export function StepCard({ index, step, note, onToggleComplete, onNoteChange }: 
           className="fixed inset-0 z-50 flex items-center justify-center bg-[#1a1330]/55 px-4"
           role="dialog"
           aria-modal="true"
-          onClick={() => setShowPreview(false)}
         >
-          <button
-            type="button"
-            className="relative w-full max-w-[920px] overflow-hidden rounded-2xl bg-white p-4 text-left"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="mb-2 flex items-center justify-between">
+          <div className="relative w-full max-w-[920px] overflow-hidden rounded-2xl bg-white p-4 text-left shadow-2xl">
+            <button
+              type="button"
+              aria-label="关闭预览"
+              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black text-lg leading-none text-white transition hover:scale-105"
+              onClick={() => setShowPreview(false)}
+            >
+              ×
+            </button>
+            <div className="mb-2 flex items-center justify-between pr-10">
               <p className="text-sm font-medium text-primary">{previewTitle}</p>
-              <span className="text-xs text-secondary">点击遮罩关闭</span>
             </div>
             <div className="h-[460px] w-full rounded-xl bg-[linear-gradient(180deg,#f5f1ff_0%,#e9e3ff_100%)]" />
-          </button>
+          </div>
         </div>
       ) : null}
     </>
