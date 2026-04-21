@@ -9,7 +9,7 @@ type HistoryListItemProps = {
 
 const statusStyleMap: Record<HistoryTask["status"], string> = {
   已完成: "bg-[#edf7f1] text-[#4c745f]",
-  进行中: "bg-[#edf2fb] text-[#4d678b]",
+  进行中: "bg-[#eeeafb] text-[#6352a6]",
   待处理: "bg-[#fdf2ea] text-[#936a53]",
 };
 
@@ -19,19 +19,24 @@ export function HistoryListItem({ task, onOpen, isActive = false }: HistoryListI
       type="button"
       onClick={onOpen}
       className={cn(
-        "w-full rounded-xl border border-transparent px-3.5 py-3 text-left transition-colors duration-150",
-        "hover:border-black/5 hover:bg-[#f5f4f8]",
-        isActive && "border-black/5 bg-[#f2f1f6]",
+        "w-full rounded-xl border px-3.5 py-3 text-left transition-all duration-150",
+        "border-transparent bg-white/40 hover:border-[#d9d2eb] hover:bg-white/90",
+        isActive && "border-[#b8abeb] bg-[linear-gradient(135deg,#7566d8_0%,#8b7de5_100%)] text-white shadow-[0_10px_20px_rgba(109,93,187,0.24)]",
       )}
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[11px] text-secondary">{task.type}</span>
-        <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-medium", statusStyleMap[task.status])}>
+        <span className={cn("text-[11px]", isActive ? "text-white/85" : "text-secondary")}>{task.type}</span>
+        <span
+          className={cn(
+            "rounded-full px-2 py-0.5 text-[11px] font-medium",
+            isActive ? "bg-white/25 text-white" : statusStyleMap[task.status],
+          )}
+        >
           {task.status}
         </span>
       </div>
-      <p className="mt-1.5 line-clamp-2 text-sm font-medium text-primary">{task.title}</p>
-      <p className="mt-1 text-[11px] text-secondary">{task.createdAt}</p>
+      <p className={cn("mt-1.5 line-clamp-2 text-sm font-medium", isActive ? "text-white" : "text-primary")}>{task.title}</p>
+      <p className={cn("mt-1 text-[11px]", isActive ? "text-white/80" : "text-secondary")}>{task.createdAt}</p>
     </button>
   );
 }
