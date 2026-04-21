@@ -42,7 +42,7 @@ export function AnalysisReportPage({ taskTitle, targetName, statusText }: Analys
   );
 
   return (
-    <PageShell className="h-screen overflow-hidden py-4">
+    <PageShell className="h-screen overflow-hidden px-3 py-4">
       <SectionContainer className="flex h-full max-w-[1600px] flex-col gap-4">
         <div className="flex items-center justify-between">
           <SecondaryButton onClick={() => router.push("/")}>← 返回首页</SecondaryButton>

@@ -38,22 +38,21 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
   return (
     <PageShell className="h-screen overflow-hidden px-5 pt-2 lg:px-8 lg:pt-3 xl:px-12">
       <SectionContainer className="flex h-full flex-col space-y-3">
-        <div className="mx-auto flex w-full max-w-[1220px] items-center justify-center gap-5">
-          <header className="glass-card flex w-[64%] max-w-[860px] items-center justify-between rounded-[24px] px-5 py-2 lg:px-7">
+        <div className="mx-auto flex w-full max-w-[1380px] items-center justify-center gap-5">
+          <h1 className="shrink-0 text-[34px] font-semibold leading-none tracking-tight text-[#4a3f63]">数据准备</h1>
+          <header className="glass-card flex w-[58%] max-w-[860px] items-center justify-between rounded-[24px] px-5 py-2 lg:px-7">
             <SecondaryButton onClick={() => router.push("/")}>← 返回工作台</SecondaryButton>
             <span className="rounded-full bg-[color:var(--accent-secondary)] px-3 py-1 text-xs text-[color:var(--accent-primary)]">
               进度 {completedCount}/3
             </span>
           </header>
-          <PrimaryButton onClick={jumpToPage3}>开始分析</PrimaryButton>
+          <PrimaryButton className="shrink-0" onClick={jumpToPage3}>
+            开始分析
+          </PrimaryButton>
         </div>
 
         <GlassCard className="mx-auto flex min-h-0 w-full max-w-[1820px] flex-1 flex-col space-y-5 p-6 pt-4 lg:p-8 lg:pt-5">
-          <div className="flex items-start justify-between shrink-0">
-            <h1 className="text-[34px] font-semibold leading-none tracking-tight text-[#4a3f63]">数据准备</h1>
-          </div>
-
-          <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[72px_minmax(0,1fr)]">
+          <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto pr-2 lg:grid-cols-[72px_minmax(0,1fr)]">
             <aside className="hidden lg:flex lg:items-center lg:justify-center">
               <div className="relative flex h-[84%] min-h-[500px] w-10 items-center justify-center">
                 <div className="h-full w-[4px] rounded-full bg-[#d8d2e0]" />

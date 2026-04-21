@@ -39,16 +39,11 @@ export function StepCard({ index, step, note, onToggleComplete, onNoteChange }: 
               <p className="mt-1 text-sm text-secondary">{step.description}</p>
             </div>
           )}
-          <span
-            className={cn(
-              "rounded-full px-2.5 py-1 text-xs font-medium",
-              step.completed
-                ? "bg-[color:var(--success-soft)] text-[color:var(--success-text)]"
-                : "bg-white/70 text-secondary",
-            )}
-          >
-            {step.completed ? "已完成" : "未完成"}
-          </span>
+          {step.completed ? (
+            <span className={cn("rounded-full bg-[color:var(--success-soft)] px-2.5 py-1 text-xs font-medium text-[color:var(--success-text)]")}>
+              已完成
+            </span>
+          ) : null}
         </div>
 
         {step.type === "upload" ? (
@@ -99,15 +94,15 @@ export function StepCard({ index, step, note, onToggleComplete, onNoteChange }: 
 
       {showPreview ? (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 px-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center px-4"
           role="dialog"
           aria-modal="true"
         >
-          <div className="relative w-full max-w-[960px]">
+          <div className="relative w-full max-w-[980px] rounded-sm bg-black p-3">
             <button
               type="button"
               aria-label="关闭预览"
-              className="absolute -top-10 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-black text-lg leading-none text-white transition hover:scale-105"
+              className="absolute -top-3 -right-4 flex h-8 w-8 items-center justify-center rounded-full bg-black text-lg leading-none text-white transition hover:scale-105"
               onClick={() => setShowPreview(false)}
             >
               ×
