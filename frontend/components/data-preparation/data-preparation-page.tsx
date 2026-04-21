@@ -36,22 +36,22 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
   };
 
   return (
-    <PageShell className="px-5 pt-3 lg:px-8 lg:pt-4 xl:px-12">
-      <SectionContainer className="space-y-4">
-        <header className="glass-card mx-auto flex w-full max-w-[1360px] items-center justify-between rounded-[30px] px-6 py-3 lg:px-8">
+    <PageShell className="h-screen overflow-hidden px-5 pt-3 lg:px-8 lg:pt-4 xl:px-12">
+      <SectionContainer className="flex h-full flex-col space-y-4">
+        <header className="glass-card mx-auto flex w-[70%] max-w-[952px] items-center justify-between rounded-[30px] px-6 py-3 lg:px-8">
           <SecondaryButton onClick={() => router.push("/")}>← 返回工作台</SecondaryButton>
           <span className="rounded-full bg-[color:var(--accent-secondary)] px-2.5 py-1 text-xs text-[color:var(--accent-primary)]">
             当前状态：等待数据准备
           </span>
         </header>
 
-        <GlassCard className="mx-auto w-full max-w-[1820px] space-y-6 p-6 lg:p-8">
-          <div className="flex items-start justify-between">
-            <h1 className="text-[42px] leading-none">数据准备</h1>
+        <GlassCard className="mx-auto flex min-h-0 w-full max-w-[1820px] flex-1 flex-col space-y-6 p-6 lg:p-8">
+          <div className="flex items-start justify-between shrink-0">
+            <h1 className="text-[34px] font-semibold leading-none tracking-tight text-[#4a3f63]">数据准备</h1>
             <span className="rounded-full bg-white/70 px-3 py-1 text-xs text-secondary">进度 {completedCount}/3</span>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-[74px_minmax(0,1fr)]">
+          <div className="grid min-h-0 flex-1 gap-5 lg:grid-cols-[74px_minmax(0,1fr)]">
             <aside className="hidden lg:flex lg:justify-center">
               <div className="relative mt-2 flex h-full min-h-[520px] w-10 items-start justify-center">
                 <div className="h-full w-[4px] rounded-full bg-[#d8d2e0]" />
@@ -68,7 +68,7 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
               </div>
             </aside>
 
-            <div className="space-y-3">
+            <div className="min-h-0 space-y-3 overflow-y-auto pr-2">
               {steps.map((step, index) => (
                 <StepCard
                   key={step.id}
@@ -82,7 +82,7 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
             </div>
           </div>
 
-          <div className="pt-1">
+          <div className="shrink-0 pt-1">
             <PrimaryButton onClick={jumpToPage3}>开始分析</PrimaryButton>
           </div>
         </GlassCard>
