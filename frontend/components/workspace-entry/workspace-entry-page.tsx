@@ -36,13 +36,13 @@ export function WorkspaceEntryPage() {
     <PageShell className="min-h-screen bg-[linear-gradient(180deg,#fcf6f4_0%,#f8f4f8_100%)] px-0 py-0">
       <WorkspaceHeader />
 
-      <SectionContainer className="flex min-h-[calc(100vh-72px)] w-full max-w-[1660px] flex-col px-5 py-8 lg:px-8 xl:px-12">
-        <div className="grid h-full flex-1 grid-cols-1 gap-6 lg:grid-cols-[minmax(0,72fr)_minmax(320px,28fr)] lg:gap-6">
-          <div className="rounded-[30px] border border-[#e5def4] bg-[#ffffff] p-6 shadow-[0_10px_24px_rgba(68,50,105,0.06)] lg:p-8 xl:p-10">
+      <SectionContainer className="flex min-h-[calc(100vh-62px)] w-full max-w-[1660px] flex-col px-5 py-6 lg:px-8 xl:px-12">
+        <div className="grid h-full flex-1 grid-cols-1 gap-4 lg:grid-cols-[minmax(0,72fr)_minmax(350px,28fr)] lg:gap-4">
+          <div className="rounded-[24px] border border-[#e3e0e8] bg-[#fffdf9] p-7 shadow-[0_10px_24px_rgba(68,50,105,0.05)] lg:p-8 xl:p-9">
             <FeatureEntryPanel options={workspaceModuleOptions} onSelect={jumpToDataPrep} />
           </div>
 
-          <div className="p-1 lg:p-2">
+          <div className="p-0.5 lg:p-1">
             <HistorySidebar tasks={workspaceHistoryTasks} onOpenTask={openHistoryTask} />
           </div>
         </div>
