@@ -8,9 +8,9 @@ type HistoryListItemProps = {
 };
 
 const statusStyleMap: Record<HistoryTask["status"], string> = {
-  已完成: "bg-[#edf7f1] text-[#4b7a61]",
-  进行中: "bg-[#ecf2fd] text-[#49668f]",
-  待处理: "bg-[#fdf2e9] text-[#9a6a4f]",
+  已完成: "bg-[#edf7f1] text-[#4c745f]",
+  进行中: "bg-[#edf2fb] text-[#4d678b]",
+  待处理: "bg-[#fdf2ea] text-[#936a53]",
 };
 
 export function HistoryListItem({ task, onOpen, isActive = false }: HistoryListItemProps) {
@@ -19,9 +19,9 @@ export function HistoryListItem({ task, onOpen, isActive = false }: HistoryListI
       type="button"
       onClick={onOpen}
       className={cn(
-        "w-full rounded-xl border border-transparent px-3 py-3 text-left transition",
-        "hover:bg-[#efefec]",
-        isActive && "bg-[#f0f0ee]",
+        "w-full rounded-xl border border-transparent px-3.5 py-3 text-left transition-colors duration-150",
+        "hover:border-black/5 hover:bg-[#f5f4f8]",
+        isActive && "border-black/5 bg-[#f2f1f6]",
       )}
     >
       <div className="flex flex-wrap items-center gap-2">

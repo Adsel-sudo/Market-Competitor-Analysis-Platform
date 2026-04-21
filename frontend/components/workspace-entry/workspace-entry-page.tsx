@@ -36,13 +36,13 @@ export function WorkspaceEntryPage() {
     <PageShell className="min-h-screen bg-[#f7f6f4] px-0 py-0">
       <WorkspaceHeader />
 
-      <SectionContainer className="flex min-h-[calc(100vh-60px)] w-full max-w-none flex-col px-5 py-8 lg:px-10">
-        <div className="flex h-full flex-1 flex-col gap-10 lg:flex-row lg:gap-10">
-          <div className="flex-1 lg:basis-4/5">
+      <SectionContainer className="flex min-h-[calc(100vh-60px)] w-full max-w-[1560px] flex-col px-5 py-8 lg:px-10 xl:px-14">
+        <div className="grid h-full flex-1 grid-cols-1 gap-10 lg:grid-cols-[minmax(0,67fr)_minmax(320px,33fr)] lg:gap-8 xl:gap-10">
+          <div className="lg:pl-8 xl:pl-14">
             <FeatureEntryPanel options={workspaceModuleOptions} onSelect={jumpToDataPrep} />
           </div>
 
-          <div className="w-full lg:w-[320px] lg:basis-1/5">
+          <div className="w-full max-w-none">
             <HistorySidebar tasks={workspaceHistoryTasks} onOpenTask={openHistoryTask} />
           </div>
         </div>
