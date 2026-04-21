@@ -9,13 +9,13 @@ type HistorySidebarProps = {
 
 export function HistorySidebar({ tasks, onOpenTask }: HistorySidebarProps) {
   return (
-    <aside className="h-full border-l border-black/10 pl-5 lg:pl-7">
-      <div className="mb-2.5">
-        <h2 className="text-base font-semibold text-primary">历史分析</h2>
-        <p className="text-xs text-secondary">最近 {tasks.length} 条</p>
+    <aside className="h-full rounded-3xl border border-[#e2ddee] bg-white/65 p-4 backdrop-blur-sm lg:p-5">
+      <div className="mb-3 border-b border-[#e7e2f2] pb-3">
+        <h2 className="text-base font-semibold text-[#302a3a]">历史分析</h2>
+        <p className="text-xs text-[#7d7692]">最近 {tasks.length} 条</p>
       </div>
 
-      <div className="mt-3 space-y-1.5">
+      <div className="mt-2 space-y-1.5">
         {tasks.map((task, index) => (
           <HistoryListItem key={task.id} task={task} onOpen={() => onOpenTask(task.id)} isActive={index === 0} />
         ))}
