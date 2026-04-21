@@ -6,13 +6,6 @@ export type WorkspaceModuleOption = {
   description: string;
 };
 
-export type PrecheckResult = {
-  detectedObject: string;
-  inferredCategory: string;
-  recommendedAction: string;
-  needsResearchFirst: string;
-};
-
 export type HistoryTask = {
   id: string;
   type: string;
@@ -25,26 +18,19 @@ export const workspaceModuleOptions: WorkspaceModuleOption[] = [
   {
     key: "competitor",
     title: "竞品分析",
-    description: "快速识别竞品结构、卖点表达与风险点。",
+    description: "分析 3 个以内竞品链接，快速识别定位与差异。",
   },
   {
     key: "research",
     title: "市场调研",
-    description: "补齐需求场景、价格带与机会区间。",
+    description: "研究类目整体状态，建立价格带与需求认知。",
   },
   {
     key: "intel",
-    title: "市场情报推送",
-    description: "订阅类目动态，持续获取信号更新。",
+    title: "情报推送",
+    description: "获取近期市场动向，持续跟踪重点信号。",
   },
 ];
-
-export const mockPrecheckResult: PrecheckResult = {
-  detectedObject: "宠物梳商品链接",
-  inferredCategory: "宠物清洁用品",
-  recommendedAction: "竞品分析",
-  needsResearchFirst: "建议先补充轻量市场调研（价格带 + 人群分层）",
-};
 
 export const workspaceHistoryTasks: HistoryTask[] = [
   {
@@ -63,9 +49,24 @@ export const workspaceHistoryTasks: HistoryTask[] = [
   },
   {
     id: "task-2403",
-    type: "市场情报推送",
+    type: "情报推送",
     title: "Top Seller 变化监控 - Grooming",
     status: "待处理",
     createdAt: "2026-04-20 08:45",
   },
 ];
+
+
+export type PrecheckResult = {
+  detectedObject: string;
+  inferredCategory: string;
+  recommendedAction: string;
+  needsResearchFirst: string;
+};
+
+export const mockPrecheckResult: PrecheckResult = {
+  detectedObject: "宠物梳商品链接",
+  inferredCategory: "宠物清洁用品",
+  recommendedAction: "竞品分析",
+  needsResearchFirst: "建议先补充轻量市场调研（价格带 + 人群分层）",
+};
