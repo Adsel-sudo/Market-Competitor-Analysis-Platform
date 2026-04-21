@@ -13,6 +13,7 @@
 ## 当前功能进度
 
 - ✅ 前端：已支持竞品分析详情页（`/competitor-analysis/[id]`，含 API 请求 + 本地 fallback）
+- ✅ 前端：已支持数据准备页（`/data-prep`）一体化纵向步骤流（页面主滚动、Step rail 与内容卡片同流）
 - ✅ 后端：已支持任务创建（`/api/tasks`）
 - ✅ 后端：已支持文件上传 + BSR 解析（`/api/tasks/{task_id}/upload`）
 - ✅ 后端：已支持竞品分析 mock 接口（`/api/competitor-analysis/{task_id}`）
@@ -110,6 +111,7 @@ NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
 ## 访问地址说明
 
 - 前端首页：`http://localhost:3000`
+- 数据准备页：`http://localhost:3000/data-prep`
 - 竞品分析页：`http://localhost:3000/competitor-analysis/demo`
 - 后端 API：`http://127.0.0.1:8000`
 - Swagger：`http://127.0.0.1:8000/docs`
