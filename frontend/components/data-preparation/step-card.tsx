@@ -10,11 +10,12 @@ type StepCardProps = {
   step: DataPreparationStep;
   note: string;
   isActive: boolean;
+  onActivate: () => void;
   onToggleComplete: (id: DataPreparationStep["id"]) => void;
   onNoteChange: (value: string) => void;
 };
 
-export function StepCard({ index, step, note, isActive, onToggleComplete, onNoteChange }: StepCardProps) {
+export function StepCard({ index, step, note, isActive, onActivate, onToggleComplete, onNoteChange }: StepCardProps) {
   const [showPreview, setShowPreview] = useState(false);
   const uploadedFileName = step.id === "step-1" ? "BSR_data.xlsx" : "listing_snapshot.html";
   const previewTitle = useMemo(() => {
@@ -26,17 +27,20 @@ export function StepCard({ index, step, note, isActive, onToggleComplete, onNote
   return (
     <>
       <article
+        tabIndex={0}
+        onClick={onActivate}
+        onFocus={onActivate}
         className={cn(
-          "surface-card rounded-2xl p-5 transition",
+          "surface-card rounded-2xl p-5 transition duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(118,96,197,0.28)]",
           step.completed
-            ? "border-[rgba(111,89,188,0.26)] bg-white ring-1 ring-[rgba(111,89,188,0.12)]"
+            ? "border-[rgba(111,89,188,0.26)] bg-white ring-1 ring-[rgba(111,89,188,0.12)] hover:border-[rgba(111,89,188,0.34)] hover:shadow-[0_8px_22px_rgba(98,76,130,0.08)]"
             : isActive
-              ? "border-[rgba(118,96,197,0.2)] bg-[rgba(255,255,255,0.94)]"
-            : "border-[rgba(88,64,104,0.1)] bg-[rgba(255,255,255,0.88)]",
+              ? "border-[rgba(118,96,197,0.24)] bg-[rgba(255,255,255,0.96)] shadow-[0_8px_20px_rgba(98,76,130,0.07)]"
+              : "border-[rgba(88,64,104,0.1)] bg-[rgba(255,255,255,0.88)] hover:-translate-y-[1px] hover:border-[rgba(118,96,197,0.2)] hover:bg-[rgba(255,255,255,0.95)] hover:shadow-[0_8px_22px_rgba(98,76,130,0.07)]",
         )}
       >
         {step.type === "upload" ? (
-          <div className="flex items-center gap-4">
+          <div className="grid items-center gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(240px,0.9fr)_minmax(280px,1fr)_minmax(290px,1.05fr)] lg:gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(280px,0.9fr)_minmax(320px,1fr)_minmax(330px,1.05fr)]">
             <div className="shrink-0 text-left">
               <p className="text-xs font-medium uppercase tracking-wide text-secondary">Step {index + 1}</p>
               <h3 className="mt-1 text-lg font-semibold text-primary">{step.title}</h3>
@@ -50,20 +54,20 @@ export function StepCard({ index, step, note, isActive, onToggleComplete, onNote
             <button
               type="button"
               onClick={() => setShowPreview(true)}
-              className="group relative ml-8 flex h-28 w-64 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[rgba(118,96,197,0.16)] bg-white"
+              className="group relative flex h-28 w-full min-w-[240px] max-w-[360px] items-center justify-center overflow-hidden rounded-xl border border-[rgba(118,96,197,0.16)] bg-white"
               aria-label={`${previewTitle}，点击查看大图`}
             >
               <div className="h-[78%] w-[86%] rounded-lg border border-[rgba(118,96,197,0.2)] bg-[rgba(246,242,255,0.45)]" />
             </button>
 
-            <p className="w-72 shrink-0 self-center text-xs leading-6 text-secondary">
+            <p className="max-w-[360px] text-xs leading-6 text-secondary">
               点击示意图可查看大图，确认文件格式和字段结构后，再上传右侧文件。
             </p>
 
             <button
               type="button"
               onClick={() => onToggleComplete(step.id)}
-              className="flex h-28 w-72 shrink-0 flex-col justify-center rounded-xl border border-dashed border-[#cdc4da] bg-white/80 px-4 text-left transition hover:bg-white"
+              className="flex h-28 w-full min-w-[290px] max-w-[370px] flex-col justify-center rounded-xl border border-dashed border-[#cdc4da] bg-white/80 px-4 text-left transition hover:bg-white"
             >
               <p className="text-sm font-medium text-primary">点击或拖拽上传</p>
               <div className="mt-3 w-full rounded-lg bg-[#f7f5ff] px-3 py-2">
