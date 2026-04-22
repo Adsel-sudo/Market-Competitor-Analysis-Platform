@@ -77,7 +77,7 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
         <header className="sticky top-3 z-20 mb-5 rounded-3xl border bg-[rgba(255,255,255,0.88)] px-4 py-3 backdrop-blur-sm lg:px-6">
           <div className="flex flex-wrap items-center justify-between gap-3 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-4">
             <h1 className="shrink-0 whitespace-nowrap text-[34px] font-semibold leading-none tracking-tight text-[#4a3f63]">数据准备</h1>
-            <div className="flex min-w-0 items-center justify-between gap-3 rounded-2xl border bg-white/75 px-3 py-2 lg:px-5">
+            <div className="flex min-w-0 items-center justify-between gap-3 rounded-2xl bg-white/75 px-3 py-2 lg:px-5">
               <SecondaryButton onClick={() => router.push("/")}>← 返回工作台</SecondaryButton>
               <span className="rounded-full bg-[color:var(--accent-secondary)] px-3 py-1 text-xs text-[color:var(--accent-primary)]">
                 进度 {completedCount}/3
@@ -104,18 +104,33 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
                   data-step-index={index}
                   className="grid grid-cols-[28px_minmax(0,1fr)] gap-3 lg:grid-cols-[42px_minmax(0,1fr)] lg:gap-5"
                 >
-                  <div className="relative flex justify-center pt-4">
-                    <span
-                      className={cn(
-                        "relative z-10 mt-1 h-3.5 w-3.5 rounded-full border-2 transition-colors",
-                        step.completed
-                          ? "border-[color:var(--accent-primary)] bg-[color:var(--accent-primary)]"
-                          : isActive
-                            ? "border-[color:var(--accent-primary)] bg-[color:var(--accent-secondary)]"
-                            : "border-[#cfbfdc] bg-white",
-                      )}
-                    />
-                    {!isLast ? <span className="absolute top-8 bottom-0 w-px bg-[#ddd4e6]" aria-hidden /> : null}
+                  <div className="flex justify-center pt-2">
+                    <div className="flex min-h-full w-4 flex-col items-center gap-2">
+                      <span
+                        className={cn(
+                          "w-[2px] flex-1 rounded-full bg-[#ddd4e6]",
+                          index === 0 ? "opacity-0" : "opacity-100",
+                        )}
+                        aria-hidden
+                      />
+                      <span
+                        className={cn(
+                          "h-3.5 w-3.5 rounded-full border-2 transition-colors",
+                          step.completed
+                            ? "border-[color:var(--accent-primary)] bg-[color:var(--accent-primary)]"
+                            : isActive
+                              ? "border-[color:var(--accent-primary)] bg-[color:var(--accent-secondary)]"
+                              : "border-[#cfbfdc] bg-white",
+                        )}
+                      />
+                      <span
+                        className={cn(
+                          "w-[2px] flex-1 rounded-full bg-[#ddd4e6]",
+                          isLast ? "opacity-0" : "opacity-100",
+                        )}
+                        aria-hidden
+                      />
+                    </div>
                   </div>
 
                   <StepCard
