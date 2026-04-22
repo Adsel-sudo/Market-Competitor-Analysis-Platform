@@ -16,6 +16,7 @@ type StepCardProps = {
 
 export function StepCard({ index, step, note, isActive, onToggleComplete, onNoteChange }: StepCardProps) {
   const [showPreview, setShowPreview] = useState(false);
+  const uploadedFileName = step.id === "step-1" ? "BSR_data.xlsx" : "listing_snapshot.html";
   const previewTitle = useMemo(() => {
     if (step.id === "step-1") return "BSR 参考图";
     if (step.id === "step-2") return "页面参考图";
@@ -48,31 +49,37 @@ export function StepCard({ index, step, note, isActive, onToggleComplete, onNote
         </div>
 
         {step.type === "upload" ? (
-          <div className="mt-3 flex flex-col gap-4 rounded-2xl border bg-white/55 p-4 lg:flex-row lg:items-stretch lg:justify-between lg:gap-6">
+          <div className="mt-3 flex flex-col gap-4 rounded-2xl border bg-white/55 p-4 lg:grid lg:grid-cols-12 lg:items-stretch lg:gap-4">
             <button
               type="button"
               onClick={() => setShowPreview(true)}
-              className="group relative mx-auto flex h-28 w-full max-w-[300px] shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[linear-gradient(180deg,#f8f5ff_0%,#efebff_100%)]"
+              className="group relative mx-auto flex h-28 w-full max-w-[320px] shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[linear-gradient(180deg,#f8f5ff_0%,#efebff_100%)] lg:col-span-4 lg:mx-0 lg:h-auto lg:max-w-none"
               aria-label={`${previewTitle}，点击查看大图`}
             >
               <div className="h-[78%] w-[86%] rounded-lg border bg-[linear-gradient(180deg,#ffffff_0%,#f7f3ff_100%)]" />
             </button>
 
-            <p className="w-full max-w-[230px] text-xs leading-6 text-secondary lg:pt-1">
+            <p className="w-full text-xs leading-6 text-secondary lg:col-span-3 lg:max-w-none lg:self-center">
               点击示意图可查看大图，确认文件格式和字段结构后，再上传右侧文件。
             </p>
 
             <button
               type="button"
               onClick={() => onToggleComplete(step.id)}
-              className="ml-auto flex min-h-[110px] w-full max-w-[320px] flex-col justify-center rounded-xl border border-dashed border-[#cdc4da] bg-white/80 px-4 text-left transition hover:bg-white"
+              className="flex min-h-[110px] w-full flex-col justify-center rounded-xl border border-dashed border-[#cdc4da] bg-white/80 px-4 text-left transition hover:bg-white lg:col-span-3"
             >
               <p className="text-sm font-medium text-primary">点击或拖拽上传</p>
-              <div className="mt-3 flex items-center gap-2 rounded-lg bg-[#f7f5ff] px-3 py-2">
-                <span className="text-sm">📎</span>
-                <span className="text-xs text-secondary">{step.id === "step-1" ? "BSR_data.xlsx" : "listing_snapshot.html"}</span>
-              </div>
             </button>
+
+            <div className="flex min-h-[110px] items-center rounded-xl border border-dashed border-[#d8cee5] bg-white/70 px-3 lg:col-span-2">
+              <div className="w-full rounded-lg bg-[#f7f5ff] px-3 py-2">
+                <p className="text-[11px] uppercase tracking-wide text-[#9184a4]">已选择文件</p>
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="text-sm">📎</span>
+                  <span className="truncate text-xs text-secondary">{uploadedFileName}</span>
+                </div>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="mt-4">
