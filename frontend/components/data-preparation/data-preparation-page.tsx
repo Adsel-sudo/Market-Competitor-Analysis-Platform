@@ -39,10 +39,10 @@ export function DataPreparationPage({ moduleName, targetObject }: DataPreparatio
   return (
     <PageShell className="px-5 pt-3 lg:px-8 xl:px-12">
       <SectionContainer className="mx-auto w-full max-w-[1820px]">
-        <header className="sticky top-3 z-20 mb-5 rounded-3xl border bg-[rgba(255,255,255,0.88)] px-4 py-3 backdrop-blur-sm lg:px-6">
+        <header className="sticky top-3 z-20 mb-5 px-4 py-3 lg:px-6">
           <div className="flex flex-wrap items-center justify-between gap-3 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-4">
             <h1 className="shrink-0 whitespace-nowrap text-[34px] font-semibold leading-none tracking-tight text-[#4a3f63]">数据准备</h1>
-            <div className="flex min-h-[60px] min-w-0 items-center justify-between gap-3 rounded-[22px] border border-[rgba(88,64,104,0.08)] bg-[rgba(252,251,255,0.94)] px-3 py-2 shadow-[0_4px_14px_rgba(72,52,99,0.045)] lg:px-5">
+            <div className="flex min-h-[60px] min-w-0 items-center justify-between gap-3 rounded-[22px] border border-[rgba(88,64,104,0.08)] bg-[#fffefe] px-3 py-2 shadow-[0_4px_14px_rgba(72,52,99,0.045)] lg:px-5">
               <SecondaryButton onClick={() => router.push("/")}>← 返回工作台</SecondaryButton>
               <span className="rounded-full bg-[color:var(--accent-secondary)] px-3 py-1 text-xs text-[color:var(--accent-primary)]">
                 进度 {completedCount}/3
