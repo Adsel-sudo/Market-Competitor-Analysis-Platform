@@ -54,6 +54,16 @@ backend/
 docker-compose.yml      # 开发环境编排（仅 backend）
 ```
 
+## 快速开始（推荐）
+
+> 适合首次拉起项目：先启动后端，再本地启动前端。
+
+1. 启动后端（Docker Compose）
+2. 启动前端（Next.js）
+3. 打开 `http://localhost:3000` 访问页面
+
+---
+
 ## 开发环境启动方式
 
 ### 1) 后端（Docker Compose）
@@ -61,10 +71,16 @@ docker-compose.yml      # 开发环境编排（仅 backend）
 > 说明：当前 Docker 配置仅用于**本地开发与联调**，用于提升启动一致性与热更新体验。  
 > **这不是生产部署方案**（未包含生产级进程管理、安全加固、反向代理、监控等）。
 
-1. 准备环境变量
+1. 准备环境变量（Windows PowerShell）
 
 ```powershell
 Copy-Item backend/.env.example backend/.env
+```
+
+或在 macOS / Linux：
+
+```bash
+cp backend/.env.example backend/.env
 ```
 
 2. 启动开发环境
@@ -108,10 +124,11 @@ NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
 8. 组件类职责拆分：`@apply` 负责布局/间距/圆角/排版，原生 CSS 负责颜色、渐变、透明度与阴影。  
 9. 新增基础样式前，先复用现有组件类；确需新增时保持命名统一（`btn-` / `ui-` / `*-card`）。
 
-## 访问地址说明
+## 访问地址说明（本地开发）
 
 - 前端首页：`http://localhost:3000`
 - 数据准备页：`http://localhost:3000/data-prep`
+- 分析报告页：`http://localhost:3000/analysis-report`
 - 竞品分析页：`http://localhost:3000/competitor-analysis/demo`
 - 后端 API：`http://127.0.0.1:8000`
 - Swagger：`http://127.0.0.1:8000/docs`
@@ -144,6 +161,12 @@ pip install -r requirements.txt
 Copy-Item .env.example .env
 # 默认使用 SQLite（sqlite:///./test.db）
 # 生产环境可后续切换 PostgreSQL
+```
+
+或在 macOS / Linux：
+
+```bash
+cp .env.example .env
 ```
 
 4. 启动服务
@@ -188,3 +211,25 @@ uvicorn app.main:app --reload
 3. 增加任务处理链路（抓取/清洗/分析）与状态流转
 4. 补充报表与可视化能力
 5. 规划生产环境部署（PostgreSQL、反向代理、监控与日志）
+
+## 常见问题（FAQ）
+
+### 1) 前端页面请求失败（Network Error）
+
+- 检查后端是否已启动：`docker compose ps`
+- 检查 `frontend/.env.local` 是否配置：
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
+```
+
+### 2) 上传 BSR 后没有入库数据
+
+- 确认文件名包含 `BSR`（大小写不敏感）
+- 确认表头包含 `asin` 与 `title`（支持中英文映射）
+- 可在 Swagger 中查看该任务上传接口返回的 `parse_status`
+
+### 3) SQLite 数据在哪
+
+- Docker Compose 默认将 SQLite 数据持久化到卷 `api_sqlite_data`
+- 容器内路径：`/app/data/test.db`
